@@ -165,6 +165,7 @@ def _create_command_line_arguments_parser():
     parser.set_defaults(func=lambda args: parser.print_help())
     parser.add_argument("-k", "--kill-switch", help="kill switch combination (default=c-m-k)", dest="kill_switch", default="ctrl+alt+k")
     parser.add_argument('-t', '--toggle', help='toggle (default=c-m-x)', default="ctrl+alt+x", dest="toggle_key")
+    parser.add_argument('-w', '--wait', help='wait N minutes before active', type=int, default=0, dest="wait")
     subparsers = parser.add_subparsers(help='sub-command help')
 
     # version command parser
@@ -218,5 +219,6 @@ def shell_entry_point():
     parser = _create_command_line_arguments_parser()
     args = parser.parse_args()
 
+    sleep(args.wait)
     args.func(args)
     keyboard.unhook_all()
