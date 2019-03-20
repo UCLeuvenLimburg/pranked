@@ -74,7 +74,7 @@ def _beep_on_key(args):
     kill_switch = args.kill_switch
 
     def on_press(x):
-        if random.randint(0, 100) < probability:
+        if _should_i(probability):
             _beep(args.frequency, args.duration)
 
     keyboard.on_press(on_press)
