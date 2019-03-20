@@ -14,6 +14,9 @@ except:
 def _nop():
     pass
 
+def _should_i(probability):
+    return random.randint(0, 100) < probability
+
 def _beep(frequency, duration):
     winsound.Beep(frequency, duration)
 
@@ -46,10 +49,12 @@ def _toggleable(toggle_key, kill_switch, turn_on, turn_off):
 def _repeat_key(args):
     toggle_key = args.toggle_key
     kill_switch  = args.kill_switch
+    probability = args.probability
     key = args.key
 
     def repeat():
-        keyboard.write(key)
+        if _should_i(probability):
+            keyboard.write(key)
 
     def turn_on():
         nonlocal current
@@ -92,6 +97,7 @@ def _block(args):
         hook = None
 
     _toggleable(toggle_key, kill_switch, turn_on, turn_off)
+
 
 def _crazymouse(args):
     kill_switch = args.kill_switch
@@ -173,6 +179,7 @@ def _create_command_line_arguments_parser():
     # repeat-key parser
     subparser = subparsers.add_parser('repeat-key', help='makes a key repeat itself')
     subparser.add_argument('key', help="key to be repeated")
+    subparser.add_argument('-p', '--probability', help='probability in % (default=10)', type=int, default=10, dest='probability')
     subparser.set_defaults(func=_repeat_key)
 
     # beep parser
