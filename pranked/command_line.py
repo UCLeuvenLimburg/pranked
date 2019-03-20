@@ -63,6 +63,7 @@ def _block(args):
 def _crazymouse(args):
     kill_switch = args.kill_switch
     delay = args.delay
+    speed = args.speed
     active = True
 
     def on_kill():
@@ -74,7 +75,7 @@ def _crazymouse(args):
     while active:
         dx = random.randint(-500, 500)
         dy = random.randint(-500, 500)
-        mouse.move(dx, dy, absolute=False, duration=1)
+        mouse.move(dx, dy, absolute=False, duration=speed)
         sleep(delay)
 
 
@@ -120,6 +121,7 @@ def _create_command_line_arguments_parser():
     # crazymouse
     subparser = subparsers.add_parser('crazymouse', help='mouse cursor moves around randomly')
     subparser.add_argument('-d', '--delay', help='delay between moves (default=10)', default=10, type=int, dest="delay")
+    subparser.add_argument('-s', '--speed', help="move speed (default=0)", default=0, type=int, dest="speed")
     subparser.set_defaults(func=_crazymouse)
 
 
