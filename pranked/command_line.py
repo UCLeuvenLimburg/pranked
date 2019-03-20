@@ -11,6 +11,9 @@ except:
     pass
 
 
+def _nop():
+    pass
+
 def _beep(frequency, duration):
     winsound.Beep(frequency, duration)
 
@@ -21,15 +24,55 @@ def _version(args):
     print(__version__)
 
 
-def _repeat_key(args):
-    key = args.key
-    kill_switch = args.kill_switch
+def _toggleable(toggle_key, kill_switch, turn_on, turn_off):
+    def on():
+        nonlocal current
+        turn_on()
+        current = off
 
-    def on_key_pressed():
-        keyboard.write(key)
-    
-    keyboard.add_hotkey(key, on_key_pressed)
+    def off():
+        nonlocal current
+        turn_off()
+        current = on
+
+    kill_switch = kill_switch
+    current = off
+    turn_on()
+
+    keyboard.add_hotkey(toggle_key, lambda: current())
     keyboard.wait(kill_switch)
+
+
+def _repeat_key(args):
+    # key = args.key
+    # kill_switch = args.kill_switch
+
+    # def on_key_pressed():
+    #     keyboard.write(key)
+    
+    # keyboard.add_hotkey(key, on_key_pressed)
+    # keyboard.wait(kill_switch)
+    toggle_key = args.toggle_key
+    kill_switch  = args.kill_switch
+    key = args.key
+
+    def repeat():
+        keyboard.write(key)
+
+    def turn_on():
+        nonlocal current
+        current = repeat
+
+    def turn_off():
+        nonlocal current
+        current = _nop
+
+    current = repeat
+    keyboard.add_hotkey(key, lambda: current())
+    _toggleable(toggle_key, kill_switch, turn_on, turn_off)
+
+
+    
 
 def _beep_on_key(args):
     probability = args.probability
@@ -120,7 +163,8 @@ def _create_command_line_arguments_parser():
     # Top level parser
     parser = argparse.ArgumentParser(prog='scripting')
     parser.set_defaults(func=lambda args: parser.print_help())
-    parser.add_argument("--kill-switch", help="kill switch combination (default=c-m-k)", dest="kill_switch", default="ctrl+alt+k")
+    parser.add_argument("-k", "--kill-switch", help="kill switch combination (default=c-m-k)", dest="kill_switch", default="ctrl+alt+k")
+    parser.add_argument('-t', '--toggle', help='toggle', default="ctrl+alt+t", dest="toggle_key")
     subparsers = parser.add_subparsers(help='sub-command help')
 
     # version command parser
@@ -146,7 +190,7 @@ def _create_command_line_arguments_parser():
     # block parser
     subparser = subparsers.add_parser('block', help='block keyboard input')
     subparser.add_argument('key', help='key to be blocked')
-    subparser.add_argument('-t', help='toggle', default="ctrl+alt+t", dest="toggle")
+    subparser.add_argument('-t', '--toggle', help='toggle', default="ctrl+alt+t", dest="toggle")
     subparser.set_defaults(func=_block)
 
     # crazymouse
