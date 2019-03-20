@@ -79,6 +79,16 @@ def _crazymouse(args):
         sleep(delay)
 
 
+def _kbtest(args):
+    kill_switch = args.kill_switch
+
+    def on_press(key):
+        print(key, flush=True)
+
+    keyboard.on_press(on_press)
+    keyboard.wait(kill_switch)
+    
+
 def _upgrade(args):
     print("pip install --upgrade git+https://github.com/UCLeuvenLimburg/pranked.git")
 
@@ -123,6 +133,13 @@ def _create_command_line_arguments_parser():
     subparser.add_argument('-d', '--delay', help='delay between moves (default=10)', default=10, type=int, dest="delay")
     subparser.add_argument('-s', '--speed', help="move speed (default=0)", default=0, type=int, dest="speed")
     subparser.set_defaults(func=_crazymouse)
+
+    # kbtest
+    subparser = subparsers.add_parser('kbtest', help='prints keyboard events')
+    subparser.set_defaults(func=_kbtest)
+
+    # logout
+    # magnifying glass
 
 
     return parser
