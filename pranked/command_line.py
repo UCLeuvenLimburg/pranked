@@ -1,6 +1,7 @@
 import argparse 
-import keyboard
+import keyboard, mouse
 import random
+from time import sleep
 from pranked.version import __version__
 
 
@@ -58,6 +59,25 @@ def _block(args):
     keyboard.add_hotkey(toggle_key, on_toggle)
     keyboard.wait(kill_switch)
 
+
+def _crazymouse(args):
+    kill_switch = args.kill_switch
+    delay = args.delay
+    active = True
+
+    def on_kill():
+        nonlocal active
+        active = False
+
+    keyboard.add_hotkey(kill_switch, on_kill)
+
+    while active:
+        dx = random.randint(-500, 500)
+        dy = random.randint(-500, 500)
+        mouse.move(dx, dy, absolute=False, duration=1)
+        sleep(delay)
+
+
 def _upgrade(args):
     print("pip install --upgrade git+https://github.com/UCLeuvenLimburg/pranked.git")
 
@@ -96,6 +116,12 @@ def _create_command_line_arguments_parser():
     subparser.add_argument('key', help='key to be blocked')
     subparser.add_argument('-t', help='toggle', default="ctrl+alt+t", dest="toggle")
     subparser.set_defaults(func=_block)
+
+    # crazymouse
+    subparser = subparsers.add_parser('crazymouse', help='mouse cursor moves around randomly')
+    subparser.add_argument('-d', '--delay', help='delay between moves (default=10)', default=10, type=int, dest="delay")
+    subparser.set_defaults(func=_crazymouse)
+
 
     return parser
 
