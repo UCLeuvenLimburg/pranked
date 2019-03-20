@@ -87,7 +87,28 @@ def _kbtest(args):
 
     keyboard.on_press(on_press)
     keyboard.wait(kill_switch)
-    
+
+
+def _magnify(args):
+    kill_switch = args.kill_switch
+    delay = args.delay
+    active = True
+
+    def on_kill():
+        nonlocal active
+        active = False
+
+    def magnify():
+        keyboard.send('windows+plus')
+        sleep(1)
+        keyboard.send('windows+plus')
+
+    keyboard.add_hotkey(kill_switch, on_kill)
+
+    while active:
+        magnify()
+        sleep(delay)
+
 
 def _upgrade(args):
     print("pip install --upgrade git+https://github.com/UCLeuvenLimburg/pranked.git")
@@ -138,9 +159,10 @@ def _create_command_line_arguments_parser():
     subparser = subparsers.add_parser('kbtest', help='prints keyboard events')
     subparser.set_defaults(func=_kbtest)
 
-    # logout
-    # magnifying glass
-
+    # magnify
+    subparser = subparsers.add_parser('magnify', help='randomly magnify')
+    subparser.add_argument('-d', '--delay', help='delay between magnifications (default=60)', default=60, type=int, dest="delay")
+    subparser.set_defaults(func=_magnify)
 
     return parser
 
