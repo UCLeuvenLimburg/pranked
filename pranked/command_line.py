@@ -32,13 +32,14 @@ def _create_command_line_arguments_parser():
     subparsers = parser.add_subparsers(help='sub-command help')
 
     # version command parser
-    test_parser = subparsers.add_parser('version', help='returns version')
-    test_parser.set_defaults(func=_version)
+    subparser = subparsers.add_parser('version', help='returns version')
+    subparser.set_defaults(func=_version)
 
     # repeat-key parser
-    test_parser = subparsers.add_parser('repeat-key', help='makes a key repeat itself')
-    test_parser.add_argument('key', help="key to be repeated")
-    test_parser.set_defaults(func=_repeat_key)
+    subparser = subparsers.add_parser('repeat-key', help='makes a key repeat itself')
+    subparser.add_argument('key', help="key to be repeated")
+    subparser.set_defaults(func=_repeat_key)
+
 
     return parser
 
