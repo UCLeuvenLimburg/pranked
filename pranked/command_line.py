@@ -21,6 +21,9 @@ def _repeat_key(args):
     keyboard.wait(kill_switch)
 
 
+def _upgrade(args):
+    print("pip install --upgrade git+https://github.com/UCLeuvenLimburg/pranked.git")
+
 def _create_command_line_arguments_parser():
     '''
     Creates parsers and subparsers
@@ -40,6 +43,9 @@ def _create_command_line_arguments_parser():
     subparser.add_argument('key', help="key to be repeated")
     subparser.set_defaults(func=_repeat_key)
 
+    # upgrade parser
+    subparser = subparsers.add_parser('upgrade', help='prints command to upgrade package')
+    subparser.set_defaults(func=_upgrade)
 
     return parser
 
