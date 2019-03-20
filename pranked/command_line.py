@@ -41,6 +41,23 @@ def _beep_on_key(args):
     keyboard.on_press(on_press)
     keyboard.wait(kill_switch)
 
+def _block(args):
+    kill_switch = args.kill_switch
+    toggle_key = args.toggle
+    blocked_key = args.key
+    hook = keyboard.block_key(blocked_key)
+
+    def on_toggle():
+        nonlocal hook
+        if hook:
+            keyboard.unblock_key(hook)
+            hook = None
+        else:
+            keyboard.block_key(blocked_key)        
+
+    keyboard.add_hotkey(toggle_key, on_toggle)
+    keyboard.wait(kill_switch)
+
 def _upgrade(args):
     print("pip install --upgrade git+https://github.com/UCLeuvenLimburg/pranked.git")
 
@@ -73,6 +90,12 @@ def _create_command_line_arguments_parser():
     subparser.add_argument('-f', help='beep frequency', type=int, default=1000, dest='frequency')
     subparser.add_argument('-d', help='duration', type=int, default=50, dest='duration')
     subparser.set_defaults(func=_beep_on_key)
+
+    # block parser
+    subparser = subparsers.add_parser('block', help='block keyboard input')
+    subparser.add_argument('key', help='key to be blocked')
+    subparser.add_argument('-t', help='toggle', default="ctrl+alt+t", dest="toggle")
+    subparser.set_defaults(func=_block)
 
     return parser
 
