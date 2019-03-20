@@ -177,7 +177,7 @@ def _create_command_line_arguments_parser():
     subparser.set_defaults(func=_kbtest)
 
     # repeat-key parser
-    subparser = subparsers.add_parser('repeat-key', help='makes a key repeat itself')
+    subparser = subparsers.add_parser('repeat', help='makes a key repeat itself')
     subparser.add_argument('key', help="key to be repeated")
     subparser.add_argument('-p', '--probability', help='probability in % (default=10)', type=int, default=10, dest='probability')
     subparser.set_defaults(func=_repeat_key)
