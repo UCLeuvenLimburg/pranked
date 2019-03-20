@@ -4,6 +4,15 @@ import random
 from pranked.version import __version__
 
 
+try:
+    import winsound
+except:
+    pass
+
+
+def _beep(frequency, duration):
+    winsound.Beep(frequency, duration)
+
 def _version(args):
     '''
     Runs when using version command
@@ -21,16 +30,13 @@ def _repeat_key(args):
     keyboard.add_hotkey(key, on_key_pressed)
     keyboard.wait(kill_switch)
 
-def _beep(args):
+def _beep_on_key(args):
     probability = args.probability
     kill_switch = args.kill_switch
 
-    def beep():
-        print('\a')
-
     def on_press(x):
         if random.randint(0, 100) < probability:
-            beep()
+            _beep(args.frequency, args.duration)
 
     keyboard.on_press(on_press)
     keyboard.wait(kill_switch)
@@ -64,7 +70,9 @@ def _create_command_line_arguments_parser():
     # beep parser
     subparser = subparsers.add_parser('beep', help='emits a beep on key presses')
     subparser.add_argument('-p', help='beep probability in % (default=10)', type=int, default=10, dest='probability')
-    subparser.set_defaults(func=_beep)
+    subparser.add_argument('-f', help='beep frequency', type=int, default=1000, dest='frequency')
+    subparser.add_argument('-d', help='duration', type=int, default=50, dest='duration')
+    subparser.set_defaults(func=_beep_on_key)
 
     return parser
 
