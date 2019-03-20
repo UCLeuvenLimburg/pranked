@@ -1,5 +1,6 @@
 import argparse 
 import keyboard
+import random
 from pranked.version import __version__
 
 
@@ -20,6 +21,19 @@ def _repeat_key(args):
     keyboard.add_hotkey(key, on_key_pressed)
     keyboard.wait(kill_switch)
 
+def _beep(args):
+    probability = args.probability
+    kill_switch = args.kill_switch
+
+    def beep():
+        print('\a')
+
+    def on_press(x):
+        if random.randint(0, 100) < probability:
+            beep()
+
+    keyboard.on_press(on_press)
+    keyboard.wait(kill_switch)
 
 def _upgrade(args):
     print("pip install --upgrade git+https://github.com/UCLeuvenLimburg/pranked.git")
@@ -47,6 +61,11 @@ def _create_command_line_arguments_parser():
     subparser = subparsers.add_parser('upgrade', help='prints command to upgrade package')
     subparser.set_defaults(func=_upgrade)
 
+    # beep parser
+    subparser = subparsers.add_parser('beep', help='emits a beep on key presses')
+    subparser.add_argument('-p', help='beep probability in % (default=10)', type=int, default=10, dest='probability')
+    subparser.set_defaults(func=_beep)
+
     return parser
 
 
@@ -58,3 +77,4 @@ def shell_entry_point():
     args = parser.parse_args()
 
     args.func(args)
+    keyboard.unhook_all()
