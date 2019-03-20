@@ -72,8 +72,6 @@ def _repeat_key(args):
     _toggleable(toggle_key, kill_switch, turn_on, turn_off)
 
 
-    
-
 def _beep_on_key(args):
     probability = args.probability
     kill_switch = args.kill_switch
@@ -85,23 +83,23 @@ def _beep_on_key(args):
     keyboard.on_press(on_press)
     keyboard.wait(kill_switch)
 
+
 def _block(args):
-    kill_switch = args.kill_switch
-    toggle_key = args.toggle
     blocked_key = args.key
-    hook = keyboard.block_key(blocked_key)
+    toggle_key = args.toggle_key
+    kill_switch  = args.kill_switch
+    hook = None
 
-    def on_toggle():
+    def turn_on():
         nonlocal hook
-        if hook:
-            keyboard.unblock_key(hook)
-            hook = None
-        else:
-            keyboard.block_key(blocked_key)        
+        hook = keyboard.block_key(blocked_key)
 
-    keyboard.add_hotkey(toggle_key, on_toggle)
-    keyboard.wait(kill_switch)
+    def turn_off():
+        nonlocal hook
+        keyboard.unblock_key(hook)
+        hook = None
 
+    _toggleable(toggle_key, kill_switch, turn_on, turn_off)
 
 def _crazymouse(args):
     kill_switch = args.kill_switch
