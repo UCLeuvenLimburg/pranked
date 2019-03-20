@@ -31,11 +31,11 @@ def _create_command_line_arguments_parser():
     parser.add_argument("--kill-switch", help="kill switch combination (default=c-m-k)", dest="kill_switch", default="ctrl+alt+k")
     subparsers = parser.add_subparsers(help='sub-command help')
 
-    # Version command parser
+    # version command parser
     test_parser = subparsers.add_parser('version', help='returns version')
     test_parser.set_defaults(func=_version)
 
-    # Test command parser
+    # repeat-key parser
     test_parser = subparsers.add_parser('repeat-key', help='makes a key repeat itself')
     test_parser.add_argument('key', help="key to be repeated")
     test_parser.set_defaults(func=_repeat_key)
