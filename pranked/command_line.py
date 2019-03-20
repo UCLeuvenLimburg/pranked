@@ -44,14 +44,6 @@ def _toggleable(toggle_key, kill_switch, turn_on, turn_off):
 
 
 def _repeat_key(args):
-    # key = args.key
-    # kill_switch = args.kill_switch
-
-    # def on_key_pressed():
-    #     keyboard.write(key)
-    
-    # keyboard.add_hotkey(key, on_key_pressed)
-    # keyboard.wait(kill_switch)
     toggle_key = args.toggle_key
     kill_switch  = args.kill_switch
     key = args.key
@@ -67,7 +59,7 @@ def _repeat_key(args):
         nonlocal current
         current = _nop
 
-    current = repeat
+    current = _nop # Will be turned on immediately by _toggleable
     keyboard.add_hotkey(key, lambda: current())
     _toggleable(toggle_key, kill_switch, turn_on, turn_off)
 
