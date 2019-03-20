@@ -171,14 +171,18 @@ def _create_command_line_arguments_parser():
     subparser = subparsers.add_parser('version', help='returns version')
     subparser.set_defaults(func=_version)
 
+   # upgrade parser
+    subparser = subparsers.add_parser('upgrade', help='prints command to upgrade package')
+    subparser.set_defaults(func=_upgrade)
+
+    # kbtest
+    subparser = subparsers.add_parser('kbtest', help='prints keyboard events')
+    subparser.set_defaults(func=_kbtest)
+
     # repeat-key parser
     subparser = subparsers.add_parser('repeat-key', help='makes a key repeat itself')
     subparser.add_argument('key', help="key to be repeated")
     subparser.set_defaults(func=_repeat_key)
-
-    # upgrade parser
-    subparser = subparsers.add_parser('upgrade', help='prints command to upgrade package')
-    subparser.set_defaults(func=_upgrade)
 
     # beep parser
     subparser = subparsers.add_parser('beep', help='emits a beep on key presses')
@@ -198,10 +202,6 @@ def _create_command_line_arguments_parser():
     subparser.add_argument('-d', '--delay', help='delay between moves (default=10)', default=10, type=int, dest="delay")
     subparser.add_argument('-s', '--speed', help="move speed (default=0)", default=0, type=int, dest="speed")
     subparser.set_defaults(func=_crazymouse)
-
-    # kbtest
-    subparser = subparsers.add_parser('kbtest', help='prints keyboard events')
-    subparser.set_defaults(func=_kbtest)
 
     # magnify
     subparser = subparsers.add_parser('magnify', help='randomly magnify')
