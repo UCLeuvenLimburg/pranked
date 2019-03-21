@@ -1,4 +1,4 @@
-import argparse 
+import argparse
 import keyboard, mouse
 import random
 from time import sleep
@@ -157,7 +157,7 @@ def _create_command_line_arguments_parser():
     Creates parsers and subparsers
     '''
     # Top level parser
-    parser = argparse.ArgumentParser(prog='scripting')
+    parser = argparse.ArgumentParser(prog='pranked')
     parser.set_defaults(func=lambda args: parser.print_help())
     parser.add_argument("-k", "--kill-switch", help="kill switch combination (default=c-m-k)", dest="kill_switch", default="ctrl+alt+k")
     parser.add_argument('-t', '--toggle', help='toggle (default=c-m-x)', default="ctrl+alt+x", dest="toggle_key")
