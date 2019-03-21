@@ -17,7 +17,7 @@ def fetch_version():
 setup(name='pranked',
       version=fetch_version(),
       description='Pranking Script',
-      url='http://github.com/UCLeuvenLimburg/scripting',
+      url='http://github.com/UCLeuvenLimburg/pranked',
       author='Frederic Vogels',
       author_email='frederic.vogels@ucll.be',
       license='MIT',
