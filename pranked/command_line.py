@@ -211,7 +211,7 @@ def _create_command_line_arguments_parser():
 
 def shell_entry_point():
     '''
-    Called from shell using 'scripting' command
+    Called from shell using 'pranked' command
     '''
     parser = _create_command_line_arguments_parser()
     args = parser.parse_args()
